@@ -1,0 +1,9 @@
+gowiki is a demonstration of a trivial wiki:
+
+- implemented in Go http://golang.org/
+- using hoisie's web.go and mustache.go 
+    http://github.com/hoisie/web.go
+    http://github.com/hoisie/mustache.go
+
+Contact: Andrew Gerrand <adg@golang.org>
+
