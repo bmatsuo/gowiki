@@ -5,5 +5,19 @@ gowiki is a demonstration of a trivial wiki:
     http://github.com/hoisie/web.go
     http://github.com/hoisie/mustache.go
 
+To deploy, create a main package like:
+
+package main
+
+import (
+	"web"
+	"wiki"
+)
+
+func main() {
+	wiki.RegisterHandlers("/")
+	web.Run(":8080")
+}
+
 Contact: Andrew Gerrand <adg@golang.org>
 

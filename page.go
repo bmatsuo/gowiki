@@ -1,4 +1,3 @@
-
 package wiki
 
 import (
@@ -9,7 +8,7 @@ import (
 
 type page struct {
 	title string
-	body string
+	body  string
 }
 
 func safeTitle(title string) string {
@@ -17,9 +16,7 @@ func safeTitle(title string) string {
 	return re.ReplaceAllString(title, "")
 }
 
-func filename(title string) string {
-	return "data/" + title + ".txt"
-}
+func filename(title string) string { return "data/" + title + ".txt" }
 
 func makePage(title string, body string) *page {
 	return &page{title: safeTitle(title), body: body}
@@ -38,4 +35,3 @@ func (p *page) save() os.Error {
 	p.title = safeTitle(p.title)
 	return ioutil.WriteFile(filename(p.title), []byte(p.body), 0600)
 }
-
