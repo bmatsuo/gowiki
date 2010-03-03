@@ -5,19 +5,24 @@ gowiki is a demonstration of a trivial wiki:
     http://github.com/hoisie/web.go
     http://github.com/hoisie/mustache.go
 
-To deploy, create a main package like:
+To deploy: 
 
-package main
+- create a main package like:
 
-import (
-	"web"
-	"wiki"
-)
+	package main
 
-func main() {
-	wiki.RegisterHandlers("/")
-	web.Run(":8080")
-}
+	import (
+		"web"
+		"wiki"
+	)
+
+	func main() {
+		wiki.RegisterHandlers("/")
+		web.Run(":8080")
+	}
+
+- create a data/ directory in your working directory
+- copy tmpl/ (including the directory itself) to your working directory
 
 Contact: Andrew Gerrand <adg@golang.org>
 
