@@ -3,7 +3,6 @@ package wiki
 import (
 	"io/ioutil"
 	"os"
-	"regexp"
 )
 
 type page struct {
@@ -11,10 +10,7 @@ type page struct {
 	body  string
 }
 
-func safeTitle(title string) string {
-	re, _ := regexp.Compile("[^a-zA-Z0-9]+")
-	return re.ReplaceAllString(title, "")
-}
+func safeTitle(title string) string { return titleRe.ReplaceAllString(title, "") }
 
 func filename(title string) string { return "data/" + title + ".txt" }
 
