@@ -2,9 +2,10 @@ package wiki
 
 import (
 	"fmt"
-	"mustache"
+	"io/ioutil"
 	"regexp"
-	"web"
+	web "github.com/hoisie/web.go"
+	"template"
 )
 
 var urlPrefix string
@@ -50,8 +51,21 @@ func renderTmpl(ctx *web.Context, tmpl, title, body string) {
 		"title":  title,
 		"body":   body,
 	}
-	content, _ := mustache.RenderFile("tmpl/"+tmpl+".mustache", d)
-	ctx.WriteString(content)
+	filename := "tmpl/"+tmpl+".html"
+	html, err := ioutil.ReadFile(filename)
+	if err != nil {
+		ctx.Abort(500, "Unable to Read template file: "+filename)
+		return
+	}
+	t, err := template.Parse(string(html), nil)
+	if err != nil {
+		ctx.Abort(500, "Unable to Parse template file: "+filename)
+		return
+	}
+	err = t.Execute(d, ctx)
+	if err != nil {
+		ctx.Abort(500, "Unable to Execute template")
+	}
 }
 
 func redirect(ctx *web.Context, handler, title string) {
