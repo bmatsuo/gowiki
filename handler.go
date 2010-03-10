@@ -2,7 +2,6 @@ package wiki
 
 import (
 	"fmt"
-	"io/ioutil"
 	"regexp"
 	web "github.com/hoisie/web.go"
 	"template"
@@ -51,20 +50,14 @@ func renderTmpl(ctx *web.Context, tmpl, title, body string) {
 		"title":  title,
 		"body":   body,
 	}
-	filename := "tmpl/"+tmpl+".html"
-	html, err := ioutil.ReadFile(filename)
+	t, err := template.ParseFile("tmpl/"+tmpl+".html", nil)
 	if err != nil {
-		ctx.Abort(500, "Unable to Read template file: "+filename)
-		return
-	}
-	t, err := template.Parse(string(html), nil)
-	if err != nil {
-		ctx.Abort(500, "Unable to Parse template file: "+filename)
+		ctx.Abort(500, "Unable to Parse template file: "+err.String())
 		return
 	}
 	err = t.Execute(d, ctx)
 	if err != nil {
-		ctx.Abort(500, "Unable to Execute template")
+		ctx.Abort(500, "Unable to Execute template: "+err.String())
 	}
 }
 
