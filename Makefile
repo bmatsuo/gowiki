@@ -7,6 +7,7 @@ include $(GOROOT)/src/Make.inc
 TARG=wiki
 GOFILES=\
 	globals.go\
+	markup.go\
 	page.go\
 	handler.go\
 

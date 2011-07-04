@@ -1,23 +1,12 @@
 package wiki
 
 import (
-    "log"
-	"fmt"
-	"regexp"
-    "strings"
     "web"
-	//web "github.com/hoisie/web.go"
+    //web "github.com/hoisie/web.go"
 	"template"
 )
 
 var urlPrefix string
-
-var linkRe, titleRe *regexp.Regexp
-
-func init() {
-	linkRe = regexp.MustCompile("\\[[a-zA-Z0-9]+([|].+)\\]")
-	titleRe = regexp.MustCompile("[^a-zA-Z0-9]+")
-}
 
 func viewHandler(ctx *web.Context, title string) {
 	page, err := loadPage(title)
@@ -25,7 +14,7 @@ func viewHandler(ctx *web.Context, title string) {
 		redirect(ctx, "edit", title)
 		return
 	}
-	renderTmpl(ctx, "view", page.title, makeLinks(page.body))
+	renderTmpl(ctx, "view", page.title, markdown(title, page.body))
 }
 
 func editHandler(ctx *web.Context, title string) {
@@ -68,6 +57,7 @@ func redirect(ctx *web.Context, handler, title string) {
 	ctx.Redirect(302, urlPrefix+handler+"/"+safeTitle(title))
 }
 
+/*
 func makeLinks(body string) string {
 	return linkRe.ReplaceAllStringFunc(body, func(match string) string {
         var (
@@ -83,6 +73,7 @@ func makeLinks(body string) string {
         return fmt.Sprintf("<a href=\"/view/%s\">%s</a>", page, text)
 	})
 }
+*/
 
 // prefix should be something like "/" or "/wiki/"
 func RegisterHandlers(prefix string) {

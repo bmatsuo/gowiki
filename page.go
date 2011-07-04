@@ -1,16 +1,21 @@
 package wiki
 
 import (
+	"regexp"
 	"io/ioutil"
 	"os"
 )
+
+var reTitleIllegal = regexp.MustCompile("[^a-zA-Z0-9()]+")
 
 type page struct {
 	title string
 	body  string
 }
 
-func safeTitle(title string) string { return titleRe.ReplaceAllString(title, "") }
+func safeTitle(title string) string {
+	return reTitleIllegal.ReplaceAllString(title, "")
+}
 
 func filename(title string) string { return "data/" + title + ".txt" }
 
