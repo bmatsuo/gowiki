@@ -1,9 +1,12 @@
 package wiki
 
 import (
+    "log"
 	"fmt"
 	"regexp"
-	web "github.com/hoisie/web.go"
+    "strings"
+    "web"
+	//web "github.com/hoisie/web.go"
 	"template"
 )
 
@@ -12,7 +15,7 @@ var urlPrefix string
 var linkRe, titleRe *regexp.Regexp
 
 func init() {
-	linkRe = regexp.MustCompile("\\[[a-zA-Z0-9]+\\]")
+	linkRe = regexp.MustCompile("\\[[a-zA-Z0-9]+([|].+)\\]")
 	titleRe = regexp.MustCompile("[^a-zA-Z0-9]+")
 }
 
@@ -39,7 +42,7 @@ func saveHandler(ctx *web.Context, title string) {
 		ctx.Abort(500, "No body supplied.")
 		return
 	}
-	page := makePage(title, body[0])
+	page := makePage(title, string(body))
 	page.save()
 	redirect(ctx, "view", title)
 }
@@ -55,7 +58,7 @@ func renderTmpl(ctx *web.Context, tmpl, title, body string) {
 		ctx.Abort(500, "Unable to Parse template file: "+err.String())
 		return
 	}
-	err = t.Execute(d, ctx)
+	err = t.Execute(ctx, d)
 	if err != nil {
 		ctx.Abort(500, "Unable to Execute template: "+err.String())
 	}
@@ -67,8 +70,17 @@ func redirect(ctx *web.Context, handler, title string) {
 
 func makeLinks(body string) string {
 	return linkRe.ReplaceAllStringFunc(body, func(match string) string {
-		inner := match[1 : len(match)-1]
-		return fmt.Sprintf("<a href=\"/view/%s\">%s</a>", inner, inner)
+        var (
+		    inner = match[1 : len(match)-1]
+            page = inner
+            text = inner
+            sepind = strings.Index(inner, "|")
+        )
+        if sepind != -1 {
+            page = inner[:sepind]
+            text = inner[sepind+1:]
+        }
+        return fmt.Sprintf("<a href=\"/view/%s\">%s</a>", page, text)
 	})
 }
 
