@@ -2,6 +2,9 @@
 
 <form action="{prefix}save/{title}" method="POST">
 <div><textarea name="body" rows="20" cols="80">{body|html}</textarea></div>
-<div><input type="submit" value="Save"></div>
+<div>
+    <input type="submit" value="Save">
+    <input type="button" name="Cancel" value="Cancel" onclick="window.location = '../cancel/{title}' " />
+</div>
 </form>
 

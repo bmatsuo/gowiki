@@ -1,6 +1,7 @@
 package wiki
 
 import (
+    "log"
     "web"
     //web "github.com/hoisie/web.go"
 	"template"
@@ -34,6 +35,13 @@ func saveHandler(ctx *web.Context, title string) {
 	page := makePage(title, string(body))
 	page.save()
 	redirect(ctx, "view", title)
+}
+
+func cancelHandler(ctx *web.Context, title string) {
+    if DEBUG {
+        log.Printf("Cancelling edit of %s", title)
+    }
+    redirect(ctx, "view", title)
 }
 
 func renderTmpl(ctx *web.Context, tmpl, title, body string) {
@@ -82,4 +90,5 @@ func RegisterHandlers(prefix string) {
 	web.Get(urlPrefix+"view/(.+)", viewHandler)
 	web.Get(urlPrefix+"edit/(.+)", editHandler)
 	web.Post(urlPrefix+"save/(.+)", saveHandler)
+	web.Get(urlPrefix+"cancel/(.+)", cancelHandler)
 }
